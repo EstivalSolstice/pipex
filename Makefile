@@ -25,9 +25,10 @@ vpath %.c $(SRC_DIRS)
 ###############                  SOURCE FILES                     ##############
 ################################################################################
 
-SRCS := main.c split_with_quotes.c exec_commands.c exec_commands_helpers.c \
+SRCS := main.c split_with_quotes.c exec_command.c exec_command_helpers.c \
 		pipex_utils.c pipex.c process_management.c file_operations.c \
-		error_exit.c
+		error_exit.c parse_command.c parse_command_helpers.c process_family.c \
+		search_and_exec.c
 
 
 BONUS_SRCS := 	main_bonus.c split_with_quotes_bonus.c exec_commands_bonus.c \
@@ -77,8 +78,8 @@ all: $(LIBFT) $(NAME)
 $(NAME): $(OBJ_DIR) $(COMMON_OBJS) $(LIBFT)
 	$(CC) $(CFLAGS) $(COMMON_OBJS) $(LDFLAGS) -o $(NAME)
 
-bonus: $(LIBFT) $(BONUS_DIR) $(BONUS_OBJS)
-	$(CC) $(CFLAGS) $(BONUS_OBJS) $(LDFLAGS) -o $(NAME)_bonus
+# bonus: $(LIBFT) $(BONUS_DIR) $(BONUS_OBJS)
+# 	$(CC) $(CFLAGS) $(BONUS_OBJS) $(LDFLAGS) -o $(NAME)_bonus
 
 $(OBJ_DIR)/%.o: %.c | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@

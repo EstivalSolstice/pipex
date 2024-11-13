@@ -6,7 +6,7 @@
 /*   By: joltmann <joltmann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 21:47:44 by joltmann          #+#    #+#             */
-/*   Updated: 2024/11/13 22:00:39 by joltmann         ###   ########.fr       */
+/*   Updated: 2024/11/13 23:00:53 by joltmann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,22 +22,22 @@ char	**get_command_args(char *cmd)
 	return (args);
 }
 
-char *get_env_var(char *name, char **envp)
+char	*get_env_var(char *name, char **envp)
 {
-    size_t  len;
-    int     i;
+	size_t	len;
+	int		i;
 
 	len = ft_strlen(name);
 	i = 0;
 	if (!envp)
-        return (NULL);
-    while (envp[i])
-    {
-        if (ft_strncmp(envp[i], name, len) == 0 && envp[i][len] == '=')
-            return (&envp[i][len + 1]);
-        i++;
-    }
-    return (NULL);
+		return (NULL);
+	while (envp[i])
+	{
+		if (ft_strncmp(envp[i], name, len) == 0 && envp[i][len] == '=')
+			return (&envp[i][len + 1]);
+		i++;
+	}
+	return (NULL);
 }
 
 char	*get_path_env(char **envp)
@@ -52,13 +52,16 @@ char	*get_path_env(char **envp)
 
 char	*build_full_path(char *dir, char *cmd)
 {
+	char	*temp;
 	char	*full_path;
-	int		length;
 
-	length = ft_strlen(dir) + ft_strlen(cmd) + 2;
-	full_path = malloc(length);
-	if (full_path)
-		sprintf(full_path, "%s/%s", dir, cmd);
+	if (!dir || !cmd)
+		return (NULL);
+	temp = ft_strjoin(dir, "/");
+	if (!temp)
+		return (NULL);
+	full_path = ft_strjoin(temp, cmd);
+	free(temp);
 	return (full_path);
 }
 
