@@ -13,13 +13,13 @@ RM := rm -rf
 # SRC_DIRS := . 
 # BONUS_DIR := checker_bonus/_obj_bonus
 OBJ_DIR := _obj
-BONUS_DIR := _obj_bonus
+BONUS_DIR := bonus/_obj_bonus
 INC_DIRS := . libft
 SRC_DIRS := .
 
 # Tell the Makefile where headers and source files are
 vpath %.h $(INC_DIRS)
-vpath %.c $(SRC_DIRS)
+vpath %.c $(SRC_DIRS) bonus
 
 ################################################################################
 ###############                  SOURCE FILES                     ##############
@@ -31,10 +31,13 @@ SRCS := main.c split_with_quotes.c exec_command.c exec_command_helpers.c \
 		search_and_exec.c
 
 
-BONUS_SRCS := 	main_bonus.c split_with_quotes_bonus.c exec_commands_bonus.c \
-				exec_commands_helpers_bonus.c pipex_utils_bonus.c \
-				pipex_bonus.c process_management_bonus.c file_operations_bonus.c \
-				error_exit_bonus.c
+BONUS_SRCS := 	bonus/main_bonus.c bonus/split_with_quotes_bonus.c \
+				bonus/exec_command_bonus.c bonus/exec_command_helpers_bonus.c \
+				bonus/pipex_utils_bonus.c bonus/pipex_bonus.c \
+				bonus/process_management_bonus.c bonus/file_operations_bonus.c \
+				bonus/error_exit_bonus.c bonus/parse_command_bonus.c \
+				bonus/parse_command_helpers_bonus.c bonus/process_family_bonus.c \
+				bonus/search_and_exec_bonus.c
 
 # BONUS_SRCS := 	cps_convert_args.c cps_helpers.c cps_initialize.c \
 # 				cps_main.c cps_operations.c cps_parse_validate.c \
@@ -51,7 +54,8 @@ COMMON_OBJS := $(addprefix $(OBJ_DIR)/, $(SRCS:%.c=%.o))
 # MAIN_OBJS := $(addprefix $(OBJ_DIR)/, $(MAIN_SRCS:%.c=%.o))
 
 # Bonus program object files
-BONUS_OBJS := $(addprefix $(BONUS_DIR)/, $(notdir $(BONUS_SRCS:%.c=%.o)))
+# BONUS_OBJS := $(addprefix $(BONUS_DIR)/, $(notdir $(BONUS_SRCS:%.c=%.o)))
+BONUS_OBJS := $(BONUS_SRCS:bonus/%.c=$(BONUS_DIR)/%.o)
 
 LIBFT := libft/libft.a
 
@@ -78,13 +82,13 @@ all: $(LIBFT) $(NAME)
 $(NAME): $(OBJ_DIR) $(COMMON_OBJS) $(LIBFT)
 	$(CC) $(CFLAGS) $(COMMON_OBJS) $(LDFLAGS) -o $(NAME)
 
-# bonus: $(LIBFT) $(BONUS_DIR) $(BONUS_OBJS)
-# 	$(CC) $(CFLAGS) $(BONUS_OBJS) $(LDFLAGS) -o $(NAME)_bonus
+bonus: $(LIBFT) $(BONUS_DIR) $(BONUS_OBJS)
+	$(CC) $(CFLAGS) $(BONUS_OBJS) $(LDFLAGS) -o $(BONUS_NAME)
 
 $(OBJ_DIR)/%.o: %.c | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(BONUS_DIR)/%.o: %.c | $(BONUS_DIR)
+$(BONUS_DIR)/%.o: bonus/%.c | $(BONUS_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJ_DIR):
