@@ -1,26 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   error_exit.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: joltmann <joltmann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/13 21:31:44 by joltmann          #+#    #+#             */
-/*   Updated: 2024/11/13 22:26:27 by joltmann         ###   ########.fr       */
+/*   Created: 2024/11/13 21:59:02 by joltmann          #+#    #+#             */
+/*   Updated: 2024/11/13 21:59:20 by joltmann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-int main(int argc, char **argv, char **envp)
+void error_exit(const char *msg)
 {
-    if (argc < 5)
-    {
-        ft_putstr_fd("Usage: ", 2);
-        ft_putstr_fd(argv[0], 2);
-        ft_putendl_fd(" infile cmd1 cmd2 ... cmdN outfile", 2);
-        return (1);
-    }
-    pipex(argc, argv, envp);
-    return (0);
+    ft_putstr_fd("pipex: ", 2);
+    ft_putendl_fd((char *)msg, 2);
+    exit(EXIT_FAILURE);
+}
+
+void infile_error_exit(const char *filename)
+{
+    ft_putstr_fd("pipex: ", 2);
+    perror(filename);
+    exit(0);
 }

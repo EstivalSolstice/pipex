@@ -25,9 +25,15 @@ vpath %.c $(SRC_DIRS)
 ###############                  SOURCE FILES                     ##############
 ################################################################################
 
-SRCS := main.c split_with_quotes.c
+SRCS := main.c split_with_quotes.c exec_commands.c exec_commands_helpers.c \
+		pipex_utils.c pipex.c process_management.c file_operations.c \
+		error_exit.c
 
-BONUS_SRCS := main_bonus.c
+
+BONUS_SRCS := 	main_bonus.c split_with_quotes_bonus.c exec_commands_bonus.c \
+				exec_commands_helpers_bonus.c pipex_utils_bonus.c \
+				pipex_bonus.c process_management_bonus.c file_operations_bonus.c \
+				error_exit_bonus.c
 
 # BONUS_SRCS := 	cps_convert_args.c cps_helpers.c cps_initialize.c \
 # 				cps_main.c cps_operations.c cps_parse_validate.c \
