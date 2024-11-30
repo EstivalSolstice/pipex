@@ -6,7 +6,7 @@
 /*   By: joltmann <joltmann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 22:08:35 by joltmann          #+#    #+#             */
-/*   Updated: 2024/11/30 23:09:06 by joltmann         ###   ########.fr       */
+/*   Updated: 2024/12/01 00:39:00 by joltmann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,16 +97,39 @@ int	wait_for_children_bonus(pid_t *pids, int num_pids)
 			perror("waitpid");
 			continue;
 		}
-
+		// if (WIFEXITED(status))
+        // {
+        //     int child_exit_code = WEXITSTATUS(status);
+        //     if (child_exit_code != 0 && exit_code == 0)
+        //         exit_code = child_exit_code;
+        // }
+        // else if (WIFSIGNALED(status))
+        // {
+        //     int child_exit_code = 128 + WTERMSIG(status);
+        //     if (exit_code == 0)
+        //         exit_code = child_exit_code;
+		// }
+		
 		if (i == num_pids - 1)
 		{
 			if (WIFEXITED(status))
 				exit_code = WEXITSTATUS(status);
 			else if (WIFSIGNALED(status))
 				exit_code = 128 + WTERMSIG(status);
-			else
-				exit_code = EXIT_FAILURE;
+			// else
+			// 	exit_code = EXIT_FAILURE;
 		}
+		
+		// if (WIFEXITED(status))
+        // {
+        //     int child_exit_code = WEXITSTATUS(status);
+        //     if (child_exit_code != 0)
+        //         exit_code = child_exit_code;
+        // }
+        // else if (WIFSIGNALED(status))
+        // {
+        //     exit_code = 128 + WTERMSIG(status);
+        // }
 	}
 	return (exit_code);
 }

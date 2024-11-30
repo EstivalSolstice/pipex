@@ -6,7 +6,7 @@
 /*   By: joltmann <joltmann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 23:22:13 by joltmann          #+#    #+#             */
-/*   Updated: 2024/11/30 23:21:25 by joltmann         ###   ########.fr       */
+/*   Updated: 2024/12/01 00:22:00 by joltmann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	execute_child_bonus(t_pipex_data *data, int fd_in, int pipe_fd[2],
 	if (dup2(pipe_fd[1], STDOUT_FILENO) == -1)
 		error_exit_bonus("dup2 failed for stdout");
 	close_fds_child(fd_in, pipe_fd, data);
-	execute_command_bonus(data->argv[cmd_index], data->envp);
+	execute_command_bonus(data, data->argv[cmd_index], data->envp);
 }
 
 

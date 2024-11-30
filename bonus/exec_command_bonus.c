@@ -6,7 +6,7 @@
 /*   By: joltmann <joltmann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 21:48:36 by joltmann          #+#    #+#             */
-/*   Updated: 2024/11/30 23:04:23 by joltmann         ###   ########.fr       */
+/*   Updated: 2024/12/01 00:24:09 by joltmann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void	command_not_found_bonus(char **args)
 //     }
 // }
 
-void	execute_command_bonus(char *cmd, char **envp)
+void	execute_command_bonus(t_pipex_data *data, char *cmd, char **envp)
 {
 	char	*cmd_path;
 	char	**cmd_args;
@@ -98,7 +98,8 @@ void	execute_command_bonus(char *cmd, char **envp)
 	cmd_args = parse_command_bonus(cmd);
 	if (!cmd_args || !cmd_args[0])
 	{
-		fprintf(stderr, "pipex: %s: Invalid command\n", cmd);
+		if (data->is_last_command)
+			fprintf(stderr, "pipex: %s: Invalid command\n", cmd);
 		if (cmd_args)
 			free(cmd_args);
 		exit(127);

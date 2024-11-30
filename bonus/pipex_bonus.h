@@ -6,7 +6,7 @@
 /*   By: joltmann <joltmann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 20:45:44 by joltmann          #+#    #+#             */
-/*   Updated: 2024/11/30 23:22:39 by joltmann         ###   ########.fr       */
+/*   Updated: 2024/12/01 00:20:16 by joltmann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	try_execve_bonus(char *full_path, char **args, char **envp);
 int		search_in_paths_bonus(char **paths, char **args, char **envp);
 int		search_and_execute_bonus(char **args, char *path_env, char **envp);
 void	execute_command_directly_bonus(char **args, char **envp);
-void	execute_command_bonus(char *cmd, char **envp);
+void	execute_command_bonus(t_pipex_data *data, char *cmd, char **envp);
 void	process_single_command_bonus(t_pipex_data *data, int *fd_in,
 				int cmd_idx);
 void	process_last_command_bonus(t_pipex_data *data);
