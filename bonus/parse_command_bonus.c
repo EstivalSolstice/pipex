@@ -6,7 +6,7 @@
 /*   By: joltmann <joltmann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 22:42:38 by joltmann          #+#    #+#             */
-/*   Updated: 2024/11/30 21:41:09 by joltmann         ###   ########.fr       */
+/*   Updated: 2024/11/30 23:00:22 by joltmann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	**parse_command_bonus(const char *cmd)
 	return (split_with_quotes_bonus(cmd));
 }
 
-char *resolve_command(char *cmd)
+char *resolve_command(char *cmd, char **envp)
 {
     char *path_env;
     char **paths;
@@ -26,7 +26,7 @@ char *resolve_command(char *cmd)
 	
 	if (access(cmd, X_OK) == 0)
         return (ft_strdup(cmd));
-	path_env = getenv("PATH");
+	path_env = get_env_var_bonus("PATH", envp);
 	 if (!path_env)
         return (NULL);
 	paths = ft_split(path_env, ':');

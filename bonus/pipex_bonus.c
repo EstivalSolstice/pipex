@@ -6,7 +6,7 @@
 /*   By: joltmann <joltmann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 22:08:35 by joltmann          #+#    #+#             */
-/*   Updated: 2024/11/30 16:53:21 by joltmann         ###   ########.fr       */
+/*   Updated: 2024/11/30 23:09:06 by joltmann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	pipex_bonus(int argc, char **argv, char **envp)
 {
 	t_pipex_data	data;
-	int				status;
+	int				exit_code;
 
 	init_pipex_data_bonus(&data, argc, argv, envp);
 	if (data.is_here_doc)
@@ -26,15 +26,17 @@ void	pipex_bonus(int argc, char **argv, char **envp)
 	else
 		open_files_bonus(&data);
 	process_commands_bonus(&data);
-	process_last_command_bonus(&data);
-	status = wait_for_children_bonus(data.pids, data.pid_index, data.last_pid);
+	exit_code = wait_for_children_bonus(data.pids, data.pid_index);
 	free(data.pids);
-	if (WIFEXITED(status))
-		exit(WEXITSTATUS(status));
-	else if (WIFSIGNALED(status))
-		exit(128 + WTERMSIG(status));
-	else
-		exit(EXIT_FAILURE);
+	exit(exit_code);
+	// status = wait_for_children_bonus(data.pids, data.pid_index, data.last_pid);
+	// free(data.pids);
+	// if (WIFEXITED(status))
+	// 	exit(WEXITSTATUS(status));
+	// else if (WIFSIGNALED(status))
+	// 	exit(128 + WTERMSIG(status));
+	// else
+	// 	exit(EXIT_FAILURE);
 }
 
 void	init_pipex_data_bonus(t_pipex_data *data, int argc, char **argv, char **envp)
@@ -61,25 +63,52 @@ void	init_pipex_data_bonus(t_pipex_data *data, int argc, char **argv, char **env
 		error_exit_bonus("Malloc failed");
 }
 
-int	wait_for_children_bonus(pid_t *pids, int num_pids, pid_t last_pid)
-{
-	int		status;
-	int		last_status;
-	pid_t	wpid;
-	int		i;
+// int	wait_for_children_bonus(pid_t *pids, int num_pids, pid_t last_pid)
+// {
+// 	int		status;
+// 	int		last_status;
+// 	pid_t	wpid;
+// 	int		i;
 
-	last_status = 0;
-	i = 0;
-	while (i < num_pids)
+// 	last_status = 0;
+// 	i = 0;
+// 	while (i < num_pids)
+// 	{
+// 		wpid = waitpid(pids[i], &status, 0);
+// 		if (wpid == -1)
+// 			perror("waitpid");
+// 		if (wpid == last_pid)
+// 			last_status = status;
+// 		i++;
+// 	}
+// 	return (last_status);
+// }
+
+int	wait_for_children_bonus(pid_t *pids, int num_pids)
+{
+	int	status;
+	int	exit_code = 0;
+	int	i;
+
+	for (i = 0; i < num_pids; i++)
 	{
-		wpid = waitpid(pids[i], &status, 0);
-		if (wpid == -1)
+		if (waitpid(pids[i], &status, 0) == -1)
+		{
 			perror("waitpid");
-		if (wpid == last_pid)
-			last_status = status;
-		i++;
+			continue;
+		}
+
+		if (i == num_pids - 1)
+		{
+			if (WIFEXITED(status))
+				exit_code = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status))
+				exit_code = 128 + WTERMSIG(status);
+			else
+				exit_code = EXIT_FAILURE;
+		}
 	}
-	return (last_status);
+	return (exit_code);
 }
 
 void	handle_here_doc_bonus(t_pipex_data *data, char *limiter)

@@ -6,7 +6,7 @@
 /*   By: joltmann <joltmann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 21:31:39 by joltmann          #+#    #+#             */
-/*   Updated: 2024/11/14 14:04:36 by joltmann         ###   ########.fr       */
+/*   Updated: 2024/11/30 23:15:50 by joltmann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ typedef struct s_pipex_data
 	int			pid_index;
 	pid_t		last_pid;
 	int			is_here_doc;
+	int     	is_last_command;
 }				t_pipex_data;
 
 typedef struct s_parser
@@ -112,8 +113,6 @@ void			execute_child(t_pipex_data *data, int fd_in, int pipe_fd[2],
 					int cmd_index);
 void			update_parent(t_pipex_data *data, int *fd_in, int pipe_fd[2],
 					pid_t pid);
-void			execute_child_bonus(t_pipex_data *data, int fd_in,
-					int pipe_fd[2], int cmd_index);
 
 // process_management.c
 void			process_commands(t_pipex_data *data);
