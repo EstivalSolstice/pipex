@@ -6,7 +6,7 @@
 /*   By: joltmann <joltmann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 22:10:18 by joltmann          #+#    #+#             */
-/*   Updated: 2024/11/13 22:10:27 by joltmann         ###   ########.fr       */
+/*   Updated: 2024/11/30 21:12:56 by joltmann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	open_files(t_pipex_data *data)
 		perror(data->argv[1]);
 		data->fd_in = open("/dev/null", O_RDONLY);
 		if (data->fd_in == -1)
-			error_exit("Failed to open /dev/null");
+			error_exit("input /dev/null");
 	}
 	data->fd_out = open(data->argv[data->argc - 1],
 			O_WRONLY | O_CREAT | O_TRUNC, 0644);

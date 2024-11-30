@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex_utils.c                                      :+:      :+:    :+:   */
+/*   pipex_utils_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: joltmann <joltmann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 22:01:26 by joltmann          #+#    #+#             */
-/*   Updated: 2024/11/13 23:06:53 by joltmann         ###   ########.fr       */
+/*   Updated: 2024/11/30 16:44:00 by joltmann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
-void	cleanup_paths(char **paths)
+void	cleanup_paths_bonus(char **paths)
 {
 	int	i;
 
@@ -25,7 +25,7 @@ void	cleanup_paths(char **paths)
 	free(paths);
 }
 
-void	free_array(char **array)
+void	free_array_bonus(char **array)
 {
 	int	i;
 
@@ -52,20 +52,20 @@ char	*ft_strndup(const char *s, size_t n)
 	return (dup);
 }
 
-char	**ft_realloc_array(char **array, size_t new_size)
+char	**ft_realloc_array_bonus(char **array, size_t new_size)
 {
 	char	**new_array;
 
 	new_array = realloc(array, new_size * sizeof(char *));
 	if (!new_array)
 	{
-		free_array(array);
+		free_array_bonus(array);
 		return (NULL);
 	}
 	return (new_array);
 }
 
-void	*ft_realloc(void *ptr, size_t old_size, size_t new_size)
+void	*ft_realloc_bonus(void *ptr, size_t old_size, size_t new_size)
 {
 	void	*new_ptr;
 

@@ -1,110 +1,64 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_command.c                                    :+:      :+:    :+:   */
+/*   parse_command_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: joltmann <joltmann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 22:42:38 by joltmann          #+#    #+#             */
-/*   Updated: 2024/11/13 23:11:23 by joltmann         ###   ########.fr       */
+/*   Updated: 2024/11/30 21:41:09 by joltmann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
-void	initialize_parser(t_parser *parser, const char *cmd)
+char	**parse_command_bonus(const char *cmd)
 {
-	parser->args = NULL;
-	parser->arg = NULL;
-	parser->arg_len = 0;
-	parser->args_count = 0;
-	parser->i = 0;
-	parser->state = 0;
-	parser->cmd = cmd;
+	return (split_with_quotes_bonus(cmd));
 }
 
-char	**parse_command(const char *cmd)
+char *resolve_command(char *cmd)
 {
-	t_parser	parser;
-
-	initialize_parser(&parser, cmd);
-	while (cmd[parser.i])
+    char *path_env;
+    char **paths;
+    char *cmd_path;
+	int i;
+	
+	if (access(cmd, X_OK) == 0)
+        return (ft_strdup(cmd));
+	path_env = getenv("PATH");
+	 if (!path_env)
+        return (NULL);
+	paths = ft_split(path_env, ':');
+	if (!paths)
+        return (NULL);
+	i = 0;
+    while(paths[i])
 	{
-		if ((cmd[parser.i] == ' ' || cmd[parser.i] == '\t')
-			&& parser.state == 0)
+        cmd_path = ft_strjoin(ft_strjoin(paths[i], "/"), cmd);
+        if (access(cmd_path, X_OK) == 0)
 		{
-			handle_whitespace(&parser);
-			continue ;
-		}
-		if (cmd[parser.i] == '\'' && parser.state != IN_DOUBLE_QUOTE)
-		{
-			handle_single_quote(&parser);
-			continue ;
-		}
-		if (cmd[parser.i] == '"' && parser.state != IN_SINGLE_QUOTE)
-		{
-			handle_double_quote(&parser);
-			continue ;
-		}
-		append_char_to_arg(&parser);
-	}
-	finalize_arg(&parser);
-	return (parser.args);
+            free_split(paths);
+            return (cmd_path);
+        }
+        free(cmd_path);
+		i++;
+    }
+    free_split(paths);
+    return (NULL);
 }
 
-// char	**parse_command(const char *cmd)
-// {
-// 	char	**args;
-// 	char	*arg;
-// 	size_t	arg_len;
-// 	size_t	args_count;
-// 	int		i;
-// 	int		state;
+void free_split(char **split_array)
+{
+    int i;
 
-// 	args = NULL;
-// 	arg = NULL;
-// 	arg_len = 0;
-// 	args_count = 0;
-// 	i = 0;
-// 	state = 0;
-// 	while (cmd[i])
-// 	{
-// 		if ((cmd[i] == ' ' || cmd[i] == '\t') && state == 0)
-// 		{
-// 			if (arg_len > 0)
-// 			{
-// 				arg = ft_strndup(arg, arg_len);
-// 				args = ft_realloc_array(args, args_count + 1);
-// 				args[args_count++] = arg;
-// 				arg = NULL;
-// 				arg_len = 0;
-// 			}
-// 			i++;
-// 			continue ;
-// 		}
-// 		else if (cmd[i] == '\'' && state != IN_DOUBLE_QUOTE)
-// 		{
-// 			state = (state == IN_SINGLE_QUOTE) ? 0 : IN_SINGLE_QUOTE;
-// 			i++;
-// 			continue ;
-// 		}
-// 		else if (cmd[i] == '"' && state != IN_SINGLE_QUOTE)
-// 		{
-// 			state = (state == IN_DOUBLE_QUOTE) ? 0 : IN_DOUBLE_QUOTE;
-// 			i++;
-// 			continue ;
-// 		}
-// 		arg = ft_realloc(arg, arg_len, arg_len + 2);
-// 		arg[arg_len++] = cmd[i++];
-// 		arg[arg_len] = '\0';
-// 	}
-// 	if (arg_len > 0)
-// 	{
-// 		arg = ft_strndup(arg, arg_len);
-// 		args = ft_realloc_array(args, args_count + 1);
-// 		args[args_count++] = arg;
-// 	}
-// 	args = ft_realloc_array(args, args_count + 1);
-// 	args[args_count] = NULL;
-// 	return (args);
-// }
+	i = 0;
+    if (!split_array)
+        return;
+    while (split_array[i])
+	{
+        free(split_array[i]);
+        i++;
+    }
+    free(split_array);
+}

@@ -1,28 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_commands_helpers.c                            :+:      :+:    :+:   */
+/*   exec_command_helpers_bonus.c                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: joltmann <joltmann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 21:47:44 by joltmann          #+#    #+#             */
-/*   Updated: 2024/11/13 23:00:53 by joltmann         ###   ########.fr       */
+/*   Updated: 2024/11/30 21:26:11 by joltmann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
-char	**get_command_args(char *cmd)
+char	**get_command_args_bonus(char *cmd)
 {
 	char	**args;
 
-	args = parse_command(cmd);
+	args = parse_command_bonus(cmd);
 	if (!args || !args[0])
-		error_exit("Command parsing failed");
+		error_exit_bonus("Command parsing failed");
 	return (args);
 }
 
-char	*get_env_var(char *name, char **envp)
+char	*get_env_var_bonus(char *name, char **envp)
 {
 	size_t	len;
 	int		i;
@@ -40,17 +40,17 @@ char	*get_env_var(char *name, char **envp)
 	return (NULL);
 }
 
-char	*get_path_env(char **envp)
+char	*get_path_env_bonus(char **envp)
 {
 	char	*path_env;
 
-	path_env = get_env_var("PATH", envp);
+	path_env = get_env_var_bonus("PATH", envp);
 	if (!path_env)
 		path_env = "/bin:/usr/bin";
 	return (path_env);
 }
 
-char	*build_full_path(char *dir, char *cmd)
+char	*build_full_path_bonus(char *dir, char *cmd)
 {
 	char	*temp;
 	char	*full_path;
@@ -65,20 +65,20 @@ char	*build_full_path(char *dir, char *cmd)
 	return (full_path);
 }
 
-void	execute_full_path(char *full_path, char **args, char **envp)
+void	execute_full_path_bonus(char *full_path, char **args, char **envp)
 {
 	if (access(full_path, X_OK) == 0)
 	{
 		execve(full_path, args, envp);
 		perror(args[0]);
-		cleanup_paths(args);
+		cleanup_paths_bonus(args);
 		exit(EXIT_FAILURE);
 	}
 	else
 	{
 		ft_putstr_fd(args[0], 2);
 		ft_putendl_fd(": Permission denied", 2);
-		cleanup_paths(args);
+		cleanup_paths_bonus(args);
 		exit(126);
 	}
 }

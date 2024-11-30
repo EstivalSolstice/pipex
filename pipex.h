@@ -6,7 +6,7 @@
 /*   By: joltmann <joltmann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 21:31:39 by joltmann          #+#    #+#             */
-/*   Updated: 2024/11/13 23:29:25 by joltmann         ###   ########.fr       */
+/*   Updated: 2024/11/14 14:04:36 by joltmann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct s_split_vars
 	bool		in_double_quote;
 	char		**args;
 	char		*token;
+	int			args_capacity;
 }				t_split_vars;
 
 typedef struct s_pipex_data
@@ -45,6 +46,7 @@ typedef struct s_pipex_data
 	pid_t		*pids;
 	int			pid_index;
 	pid_t		last_pid;
+	int			is_here_doc;
 }				t_pipex_data;
 
 typedef struct s_parser
@@ -76,6 +78,7 @@ void			execute_command(char *cmd, char **envp);
 
 // file_operations.c
 void			open_files(t_pipex_data *data);
+void			open_files_here_doc(t_pipex_data *data);
 
 // pipex_utils.c
 void			cleanup_paths(char **paths);
@@ -100,6 +103,8 @@ void			pipex(int argc, char **argv, char **envp);
 void			init_pipex_data(t_pipex_data *data, int argc, char **argv,
 					char **envp);
 int				wait_for_children(pid_t *pids, int num_pids, pid_t last_pid);
+void			handle_here_doc(t_pipex_data *data, char *limiter);
+void			read_here_doc_input(int write_fd, char *limiter);
 
 //process_handle_family.c
 void			execute_last_child(t_pipex_data *data);
@@ -107,6 +112,9 @@ void			execute_child(t_pipex_data *data, int fd_in, int pipe_fd[2],
 					int cmd_index);
 void			update_parent(t_pipex_data *data, int *fd_in, int pipe_fd[2],
 					pid_t pid);
+void			execute_child_bonus(t_pipex_data *data, int fd_in,
+					int pipe_fd[2], int cmd_index);
+
 // process_management.c
 void			process_commands(t_pipex_data *data);
 void			process_single_command(t_pipex_data *data, int *fd_in,
@@ -120,5 +128,8 @@ int				search_and_execute(char **args, char *path_env, char **envp);
 
 // split_with_quotes.c
 char			**split_with_quotes(const char *cmd);
+
+// debugging
+void			try_execve_debug(char *full_path, char **args, char **envp);
 
 #endif
