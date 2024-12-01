@@ -47,7 +47,7 @@ typedef struct s_pipex_data
 	int			pid_index;
 	pid_t		last_pid;
 	int			is_here_doc;
-	int     	is_last_command;
+	int			is_last_command;
 }				t_pipex_data;
 
 typedef struct s_parser
@@ -107,7 +107,7 @@ int				wait_for_children(pid_t *pids, int num_pids, pid_t last_pid);
 void			handle_here_doc(t_pipex_data *data, char *limiter);
 void			read_here_doc_input(int write_fd, char *limiter);
 
-//process_handle_family.c
+// process_handle_family.c
 void			execute_last_child(t_pipex_data *data);
 void			execute_child(t_pipex_data *data, int fd_in, int pipe_fd[2],
 					int cmd_index);

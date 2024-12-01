@@ -6,7 +6,7 @@
 /*   By: joltmann <joltmann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 21:31:29 by joltmann          #+#    #+#             */
-/*   Updated: 2024/11/30 16:54:20 by joltmann         ###   ########.fr       */
+/*   Updated: 2024/12/01 16:06:50 by joltmann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,48 +29,16 @@ static int	init_split_vars_bonus(t_split_vars *v, const char *cmd)
 	return (1);
 }
 
-static int	add_token_to_args_bonus(t_split_vars *v)
+void	free_args_up_to_index_bonus(char **args, int index)
 {
-	int		k;
-	char	**new_args;
+	int	k;
 
-	v->token[v->j] = '\0';
-	if (v->i >= v->args_capacity)
+	k = 0;
+	while (k < index)
 	{
-		v->args_capacity *= 2;
-		new_args = realloc(v->args, v->args_capacity * sizeof(char *));
-		if (!new_args)
-		{
-			k = 0;
-			while (k < v->i)
-			{
-				free(v->args[k]);
-				k++;
-			}
-			free(v->args);
-			free(v->token);
-			error_exit_bonus("Malloc failed for command parsing");
-			return (0);
-		}
-		v->args = new_args;
+		free(args[k]);
+		k++;
 	}
-	v->args[v->i] = ft_strdup(v->token);
-	if (!v->args[v->i])
-	{
-		k = 0;
-		while (k < v->i)
-		{
-			free(v->args[k]);
-			k++;
-		}
-		free(v->args);
-		free(v->token);
-		error_exit_bonus("Malloc failed for command parsing");
-		return (0);
-	}
-	v->i++;
-	v->j = 0;
-	return (1);
 }
 
 static int	process_cmd_bonus(t_split_vars *v, const char *cmd)

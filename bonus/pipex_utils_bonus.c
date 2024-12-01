@@ -6,7 +6,7 @@
 /*   By: joltmann <joltmann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 22:01:26 by joltmann          #+#    #+#             */
-/*   Updated: 2024/11/30 16:44:00 by joltmann         ###   ########.fr       */
+/*   Updated: 2024/12/01 15:14:31 by joltmann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,16 +52,24 @@ char	*ft_strndup(const char *s, size_t n)
 	return (dup);
 }
 
-char	**ft_realloc_array_bonus(char **array, size_t new_size)
+char	**ft_realloc_array_bonus(char **array, size_t old_size, size_t new_size)
 {
 	char	**new_array;
+	size_t	i;
 
-	new_array = realloc(array, new_size * sizeof(char *));
+	i = 0;
+	new_array = malloc(new_size * sizeof(char *));
 	if (!new_array)
 	{
 		free_array_bonus(array);
 		return (NULL);
 	}
+	while (i < old_size && i < new_size)
+	{
+		new_array[i] = array[i];
+		i++;
+	}
+	free(array);
 	return (new_array);
 }
 

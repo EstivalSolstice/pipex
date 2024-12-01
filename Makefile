@@ -37,7 +37,8 @@ BONUS_SRCS := 	bonus/main_bonus.c bonus/split_with_quotes_bonus.c \
 				bonus/process_management_bonus.c bonus/file_operations_bonus.c \
 				bonus/error_exit_bonus.c bonus/parse_command_bonus.c \
 				bonus/parse_command_helpers_bonus.c bonus/process_family_bonus.c \
-				bonus/search_and_exec_bonus.c
+				bonus/search_and_exec_bonus.c bonus/add_token_to_args_bonus.c \
+				bonus/get_env_helpers_bonus.c bonus/handle_heredoc_bonus.c 
 
 # BONUS_SRCS := 	cps_convert_args.c cps_helpers.c cps_initialize.c \
 # 				cps_main.c cps_operations.c cps_parse_validate.c \

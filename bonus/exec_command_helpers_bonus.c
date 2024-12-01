@@ -6,7 +6,7 @@
 /*   By: joltmann <joltmann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 21:47:44 by joltmann          #+#    #+#             */
-/*   Updated: 2024/11/30 21:26:11 by joltmann         ###   ########.fr       */
+/*   Updated: 2024/12/01 16:05:13 by joltmann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,32 +22,34 @@ char	**get_command_args_bonus(char *cmd)
 	return (args);
 }
 
-char	*get_env_var_bonus(char *name, char **envp)
+void	execute_command_directly_bonus(char **args, char **envp)
 {
-	size_t	len;
-	int		i;
-
-	len = ft_strlen(name);
-	i = 0;
-	if (!envp)
-		return (NULL);
-	while (envp[i])
+	if (access(args[0], F_OK) == 0)
 	{
-		if (ft_strncmp(envp[i], name, len) == 0 && envp[i][len] == '=')
-			return (&envp[i][len + 1]);
-		i++;
+		if (access(args[0], X_OK) == 0)
+		{
+			execve(args[0], args, envp);
+			perror(args[0]);
+			cleanup_paths_bonus(args);
+			exit(EXIT_FAILURE);
+		}
+		else
+		{
+			ft_putstr_fd(args[0], 2);
+			ft_putendl_fd(": Permission denied", 2);
+			cleanup_paths_bonus(args);
+			exit(126);
+		}
 	}
-	return (NULL);
 }
 
-char	*get_path_env_bonus(char **envp)
+void	command_not_found_bonus(char **args)
 {
-	char	*path_env;
-
-	path_env = get_env_var_bonus("PATH", envp);
-	if (!path_env)
-		path_env = "/bin:/usr/bin";
-	return (path_env);
+	ft_putstr_fd("pipex: ", 2);
+	ft_putstr_fd(args[0], 2);
+	ft_putendl_fd(": command not found", 2);
+	cleanup_paths_bonus(args);
+	exit(127);
 }
 
 char	*build_full_path_bonus(char *dir, char *cmd)

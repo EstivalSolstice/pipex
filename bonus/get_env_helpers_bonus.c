@@ -1,30 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_bonus.c                                       :+:      :+:    :+:   */
+/*   get_env_helpers_bonus.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: joltmann <joltmann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/13 21:31:50 by joltmann          #+#    #+#             */
-/*   Updated: 2024/11/30 21:29:53 by joltmann         ###   ########.fr       */
+/*   Created: 2024/12/01 16:05:32 by joltmann          #+#    #+#             */
+/*   Updated: 2024/12/01 16:05:41 by joltmann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-int	main(int argc, char **argv, char **envp)
+char	*get_env_var_bonus(char *name, char **envp)
 {
-	static char	*default_env[] = {"PATH=/usr/bin:/bin", NULL};
+	size_t	len;
+	int		i;
 
-	if (argc < 5)
+	len = ft_strlen(name);
+	i = 0;
+	if (!envp)
+		return (NULL);
+	while (envp[i])
 	{
-		ft_putstr_fd("Usage: ", 2);
-		ft_putstr_fd(argv[0], 2);
-		ft_putendl_fd(" infile cmd1 cmd2 ... cmdN outfile", 2);
-		return (1);
+		if (ft_strncmp(envp[i], name, len) == 0 && envp[i][len] == '=')
+			return (&envp[i][len + 1]);
+		i++;
 	}
-	if (!envp || !envp[0])
-		envp = default_env;
-	pipex_bonus(argc, argv, envp);
-	return (0);
+	return (NULL);
+}
+
+char	*get_path_env_bonus(char **envp)
+{
+	char	*path_env;
+
+	path_env = get_env_var_bonus("PATH", envp);
+	if (!path_env)
+		path_env = "/bin:/usr/bin";
+	return (path_env);
 }
