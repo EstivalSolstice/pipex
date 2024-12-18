@@ -6,7 +6,7 @@
 /*   By: joltmann <joltmann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 22:08:35 by joltmann          #+#    #+#             */
-/*   Updated: 2024/12/01 16:08:18 by joltmann         ###   ########.fr       */
+/*   Updated: 2024/12/18 20:23:38 by joltmann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,40 +82,6 @@ int	wait_for_children_bonus(pid_t *pids, int num_pids)
 	}
 	return (exit_code);
 }
-
-// void	handle_here_doc_bonus(t_pipex_data *data, char *limiter)
-// {
-// 	int		here_doc_pipe[2];
-// 	char	*line;
-
-// 	if (pipe(here_doc_pipe) == -1)
-// 		error_exit_bonus("Pipe creation failed");
-// 	if (fork() == 0)
-// 	{
-// 		close(here_doc_pipe[0]);
-// 		while (1)
-// 		{
-// 			ft_putstr_fd("heredoc> ", STDOUT_FILENO);
-// 			line = get_next_line(STDIN_FILENO);
-// 			if (!line || (ft_strncmp(line, limiter, ft_strlen(limiter)) == 0
-// 					&& line[ft_strlen(limiter)] == '\n'))
-// 			{
-// 				free(line);
-// 				break ;
-// 			}
-// 			ft_putstr_fd(line, here_doc_pipe[1]);
-// 			free(line);
-// 		}
-// 		close(here_doc_pipe[1]);
-// 		exit(EXIT_SUCCESS);
-// 	}
-// 	else
-// 	{
-// 		close(here_doc_pipe[1]);
-// 		data->fd_in = here_doc_pipe[0];
-// 		wait(NULL);
-// 	}
-// }
 
 void	read_here_doc_input_bonus(int write_fd, char *limiter)
 {

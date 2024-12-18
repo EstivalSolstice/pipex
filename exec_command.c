@@ -6,42 +6,11 @@
 /*   By: joltmann <joltmann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 21:48:36 by joltmann          #+#    #+#             */
-/*   Updated: 2024/11/13 23:27:51 by joltmann         ###   ########.fr       */
+/*   Updated: 2024/12/18 20:14:46 by joltmann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
-
-// int	search_and_execute(char **args, char *path_env, char **envp)
-// {
-// 	char	**paths;
-// 	char	*full_path;
-// 	int		i;
-
-// 	paths = ft_split(path_env, ':');
-// 	if (!paths)
-// 		error_exit("Malloc failed");
-// 	i = 0;
-// 	while (paths[i])
-// 	{
-// 		full_path = build_full_path(paths[i], args[0]);
-// 		if (!full_path)
-// 			error_exit("Malloc failed");
-// 		if (access(full_path, F_OK | X_OK) == 0)
-// 		{
-// 			execve(full_path, args, envp);
-// 			perror(args[0]);
-// 			cleanup_paths(args);
-// 			free(full_path);
-// 			free_array(paths);
-// 			exit(EXIT_FAILURE);
-// 		}
-// 		free(full_path);
-// 		i++;
-// 	}
-// 	free_array(paths);
-// 	return (1);
-// }
 
 void	execute_command_directly(char **args, char **envp)
 {
