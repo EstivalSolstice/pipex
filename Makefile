@@ -12,6 +12,7 @@ RM := rm -rf
 # INC_DIRS := . libft
 # SRC_DIRS := . 
 # BONUS_DIR := checker_bonus/_obj_bonus
+LIBFT_DIR := libft/_obj
 OBJ_DIR := _obj
 BONUS_DIR := bonus/_obj_bonus
 INC_DIRS := . libft
@@ -99,25 +100,16 @@ $(BONUS_DIR):
 	mkdir -p $(BONUS_DIR)
 
 clean:
-	$(RM) $(OBJ_DIR) $(BONUS_DIR)
+	$(RM) $(OBJ_DIR) $(BONUS_DIR) $(LIBFT_DIR)
 
 fclean: clean
-	$(RM) $(NAME) $(BONUS_NAME)
+	$(RM) $(NAME) $(BONUS_NAME) $(LIBFT_DIR)
 	$(RM) libft/_obj libft/libft.a
 
-re: fclean submodule_update all
+re: fclean all
 
 $(LIBFT):
 	make -C libft
-
-submodule_update:
-	git submodule update --remote --merge
-
-re_submodule: submodule_rebuild
-
-submodule_rebuild:
-	git submodule deinit -f .
-	git submodule update --init --recursive
 
 help:
 	@echo "Makefile for $(NAME)"
@@ -133,7 +125,5 @@ help:
 	@echo "	make help					Display this help message"
 
 -include $(OBJS:%.o=%.d)
-# -include $(BONUS_OBJS:%.o=%.d)
-# -include $(GNL_OBJS:%.o=%.d)
 
-.PHONY: all bonus clean fclean re submodule_update re_submodule submodule_rebuild help
+.PHONY: all bonus clean fclean re help

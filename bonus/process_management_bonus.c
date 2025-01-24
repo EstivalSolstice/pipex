@@ -6,7 +6,7 @@
 /*   By: joltmann <joltmann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 22:10:50 by joltmann          #+#    #+#             */
-/*   Updated: 2024/12/01 15:16:47 by joltmann         ###   ########.fr       */
+/*   Updated: 2025/01/24 04:04:19 by joltmann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,11 @@ void	process_single_command_bonus(t_pipex_data *data, int *fd_in,
 	if (pid == -1)
 		error_exit_bonus("Fork failed");
 	if (pid == 0)
+	{
 		execute_child_bonus(data, *fd_in, pipe_fd, cmd_index);
+	}
 	else
+	{
 		update_parent_bonus(data, fd_in, pipe_fd, pid);
+	}
 }
