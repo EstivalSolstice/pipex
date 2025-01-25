@@ -6,7 +6,7 @@
 /*   By: joltmann <joltmann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 22:08:35 by joltmann          #+#    #+#             */
-/*   Updated: 2025/01/24 03:10:00 by joltmann         ###   ########.fr       */
+/*   Updated: 2025/01/25 22:04:36 by joltmann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,9 @@ void	pipex_bonus(int argc, char **argv, char **envp)
 {
 	t_pipex_data	data;
 	int				exit_code;
+	int				init_status;
 
+	init_status = 0;
 	init_pipex_data_bonus(&data, argc, argv, envp);
 	if (data.is_here_doc)
 	{
@@ -26,7 +28,7 @@ void	pipex_bonus(int argc, char **argv, char **envp)
 	else
 		open_files_bonus(&data);
 	process_commands_bonus(&data);
-	exit_code = wait_for_children_bonus(data.pids, data.pid_index);
+	exit_code = wait_for_children_bonus(data.pids, data.pid_index, init_status);
 	free(data.pids);
 	exit(exit_code);
 }
@@ -56,10 +58,10 @@ void	init_pipex_data_bonus(t_pipex_data *data, int argc, char **argv,
 		error_exit_bonus("Malloc failed");
 }
 
-int	wait_for_children_bonus(pid_t *pids, int num_pids)
+int	wait_for_children_bonus(pid_t *pids, int num_pids, int status)
 {
-	int	status;
 	int	exit_code;
+	int	child_exit_code;
 	int	i;
 
 	i = 0;
@@ -71,13 +73,15 @@ int	wait_for_children_bonus(pid_t *pids, int num_pids)
 			perror("waitpid");
 			continue ;
 		}
-		if (i == num_pids - 1)
+		if (WIFEXITED(status))
 		{
-			if (WIFEXITED(status))
-				exit_code = WEXITSTATUS(status);
-			else if (WIFSIGNALED(status))
-				exit_code = 128 + WTERMSIG(status);
+			child_exit_code = WEXITSTATUS(status);
+			if (i == num_pids - 1)
+				exit_code = child_exit_code;
 		}
+		else if (WIFSIGNALED(status))
+			if (i == num_pids - 1)
+				exit_code = 128 + WTERMSIG(status);
 		i++;
 	}
 	return (exit_code);

@@ -6,7 +6,7 @@
 /*   By: joltmann <joltmann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 22:08:35 by joltmann          #+#    #+#             */
-/*   Updated: 2025/01/24 05:10:12 by joltmann         ###   ########.fr       */
+/*   Updated: 2025/01/25 22:01:29 by joltmann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,16 @@ void	pipex(int argc, char **argv, char **envp)
 {
 	t_pipex_data	data;
 	int				status;
+	int				init_status;
 
+	init_status = 0;
 	init_pipex_data(&data, argc, argv, envp);
 	open_files(&data);
 	process_commands(&data);
 	process_last_command(&data);
-	status = wait_for_children(data.pids, data.pid_index, data.last_pid);
+	status = wait_for_children(data.pids, data.pid_index, init_status);
 	free(data.pids);
-	if (WIFEXITED(status))
-		exit(WEXITSTATUS(status));
-	else if (WIFSIGNALED(status))
-		exit(128 + WTERMSIG(status));
-	else
-		exit(EXIT_FAILURE);
+	exit(status);
 }
 
 void	init_pipex_data(t_pipex_data *data, int argc, char **argv, char **envp)
@@ -45,23 +42,31 @@ void	init_pipex_data(t_pipex_data *data, int argc, char **argv, char **envp)
 		error_exit("Malloc failed");
 }
 
-int	wait_for_children(pid_t *pids, int num_pids, pid_t last_pid)
+int	wait_for_children(pid_t *pids, int num_pids, int status)
 {
-	int		status;
-	int		last_status;
-	pid_t	wpid;
-	int		i;
+	int	exit_code;
+	int	child_exit_code;
+	int	i;
 
-	last_status = 0;
 	i = 0;
+	exit_code = 0;
 	while (i < num_pids)
 	{
-		wpid = waitpid(pids[i], &status, 0);
-		if (wpid == -1)
+		if (waitpid(pids[i], &status, 0) == -1)
+		{
 			perror("waitpid");
-		if (wpid == last_pid)
-			last_status = status;
+			continue ;
+		}
+		if (WIFEXITED(status))
+		{
+			child_exit_code = WEXITSTATUS(status);
+			if (i == num_pids - 1)
+				exit_code = child_exit_code;
+		}
+		else if (WIFSIGNALED(status))
+			if (i == num_pids - 1)
+				exit_code = 128 + WTERMSIG(status);
 		i++;
 	}
-	return (last_status);
+	return (exit_code);
 }
