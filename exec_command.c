@@ -6,7 +6,7 @@
 /*   By: joltmann <joltmann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 21:48:36 by joltmann          #+#    #+#             */
-/*   Updated: 2024/12/18 20:14:46 by joltmann         ###   ########.fr       */
+/*   Updated: 2025/01/24 04:46:29 by joltmann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ void	execute_command_directly(char **args, char **envp)
 			exit(126);
 		}
 	}
+	else
+		command_not_found(args);
 }
 
 void	command_not_found(char **args)

@@ -15,8 +15,7 @@ run_test() {
     local description=$1
     local command=$2
     local expected_exit=$3
-    local input_file=$4
-    local expected_output=$5
+    local expected_output=$4
     local output_file="output.txt"
 
     # Cleanup previous output
@@ -78,25 +77,25 @@ echo -e "Hello\nWorld\n42\nSchool" > input.txt
 echo -e "4" > expected_output.txt
 run_test "Basic command chain (cat | wc)" \
     "./pipex input.txt \"cat\" \"wc -l\" output.txt" \
-    0 input.txt expected_output.txt
+    0 expected_output.txt
 
 # Test 2: Invalid command
 echo -e "0" > expected_output.txt
 run_test "Invalid command creates output file" \
     "./pipex input.txt \"invalid_cmd\" \"wc -l\" output.txt 2>/dev/null" \
-    127 input.txt expected_output.txt
+    127 expected_output.txt
 
 # Test 3: Empty input file
 > empty.txt
 echo -e "0" > expected_output.txt
 run_test "Empty input file (cat | wc)" \
     "./pipex empty.txt \"cat\" \"wc -l\" output.txt" \
-    0 empty.txt expected_output.txt
+    0 expected_output.txt
 
 # Test 4: Nonexistent input file
 run_test "Nonexistent input file" \
     "./pipex nonexistent.txt \"cat\" \"wc -l\" output.txt" \
-    1 nonexistent.txt /dev/null
+    1 /dev/null
 
 # Bonus tests (with here_doc and multiple pipes)
 echo -e "${GREEN}--- Bonus Tests ---${NC}"
@@ -104,32 +103,55 @@ echo -e "${GREEN}--- Bonus Tests ---${NC}"
 # Test 5: Basic here_doc
 echo -e "2" > expected_output.txt
 run_test "Basic here_doc test" \
-    "./pipex here_doc EOF \"cat\" \"wc -l\" output.txt <<< \"Line 1\nLine 2\nEOF\"" \
-    0 /dev/null expected_output.txt
+    "./pipex_bonus here_doc EOF \"cat\" \"wc -l\" output.txt << EOF
+Line 1
+Line 2
+EOF" \
+    0 expected_output.txt
 
 # Test 6: Here_doc with empty input
 echo -e "0" > expected_output.txt
 run_test "Here_doc with empty input" \
-    "./pipex here_doc EOF \"cat\" \"wc -l\" output.txt <<< \"EOF\"" \
-    0 /dev/null expected_output.txt
+    "./pipex_bonus here_doc EOF \"cat\" \"wc -l\" output.txt << EOF
+EOF" \
+    0 expected_output.txt
 
 # Test 7: Multiple pipes with here_doc
 echo -e "2" > expected_output.txt
 run_test "Here_doc with multiple pipes" \
-    "./pipex here_doc EOF \"cat\" \"grep Line\" \"wc -l\" output.txt <<< \"Line 1\nLine 2\nEOF\"" \
-    0 /dev/null expected_output.txt
+    "./pipex_bonus here_doc EOF \"cat\" \"grep Line\" \"wc -l\" output.txt << EOF
+Line 1
+Line 2
+EOF" \
+    0 expected_output.txt
 
 # Test 8: Multiple commands without here_doc
-echo -e "2" > expected_output.txt
+echo -e "1" > expected_output.txt
 run_test "Multiple commands without here_doc" \
-    "./pipex input.txt \"cat\" \"grep 42\" \"wc -l\" output.txt" \
-    0 input.txt expected_output.txt
+    "./pipex_bonus input.txt \"cat\" \"grep 42\" \"wc -l\" output.txt" \
+    0 expected_output.txt
 
 # Test 9: Invalid command in the middle of a pipeline
 echo -e "0" > expected_output.txt
 run_test "Invalid command in pipeline" \
-    "./pipex input.txt \"cat\" \"invalid_cmd\" \"wc -l\" output.txt 2>/dev/null" \
-    127 input.txt expected_output.txt
+    "./pipex_bonus input.txt \"cat\" \"invalid_cmd\" \"wc -l\" output.txt 2>/dev/null" \
+    127 expected_output.txt
+
+# Test 10: Long pipeline with here_doc
+echo -e "1" > expected_output.txt
+run_test "Long pipeline with here_doc" \
+    "./pipex_bonus here_doc EOF \"cat\" \"grep Line\" \"grep 1\" \"wc -l\" output.txt << EOF
+Line 1
+Line 2
+Line 3
+EOF" \
+    0 expected_output.txt
+
+# Test 11: Complex commands in pipeline
+echo -e "2" > expected_output.txt
+run_test "Complex commands in pipeline" \
+    "./pipex_bonus input.txt \"cat\" \"grep -E 'Hello|World'\" \"wc -l\" output.txt" \
+    0 expected_output.txt
 
 # Cleanup
 rm -f input.txt empty.txt expected_output.txt output.txt

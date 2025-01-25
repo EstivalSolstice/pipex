@@ -1,5 +1,5 @@
 NAME := pipex
-BONUS_NAME := pipex
+BONUS_NAME := pipex_bonus
 .DEFAULT_GOAL := all
 CC := cc
 RM := rm -rf
@@ -84,7 +84,9 @@ all: $(LIBFT) $(NAME)
 $(NAME): $(OBJ_DIR) $(COMMON_OBJS) $(LIBFT)
 	$(CC) $(CFLAGS) $(COMMON_OBJS) $(LDFLAGS) -o $(NAME)
 
-bonus: $(LIBFT) $(BONUS_DIR) $(BONUS_OBJS)
+bonus: $(LIBFT) $(BONUS_DIR) $(BONUS_OBJS) $(BONUS_NAME)
+
+$(BONUS_NAME): $(LIBFT) $(BONUS_DIR) $(BONUS_OBJS)
 	$(CC) $(CFLAGS) $(BONUS_OBJS) $(LDFLAGS) -o $(BONUS_NAME)
 
 $(OBJ_DIR)/%.o: %.c | $(OBJ_DIR)
