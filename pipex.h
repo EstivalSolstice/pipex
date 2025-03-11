@@ -6,7 +6,7 @@
 /*   By: joltmann <joltmann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 21:31:39 by joltmann          #+#    #+#             */
-/*   Updated: 2024/11/30 23:15:50 by joltmann         ###   ########.fr       */
+/*   Updated: 2025/01/25 22:01:53 by joltmann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ char			**parse_command(const char *cmd);
 void			pipex(int argc, char **argv, char **envp);
 void			init_pipex_data(t_pipex_data *data, int argc, char **argv,
 					char **envp);
-int				wait_for_children(pid_t *pids, int num_pids, pid_t last_pid);
+int				wait_for_children(pid_t *pids, int num_pids, int status);
 void			handle_here_doc(t_pipex_data *data, char *limiter);
 void			read_here_doc_input(int write_fd, char *limiter);
 

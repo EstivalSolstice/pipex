@@ -1,5 +1,5 @@
 NAME := pipex
-BONUS_NAME := pipex
+BONUS_NAME := pipex_bonus
 .DEFAULT_GOAL := all
 CC := cc
 RM := rm -rf
@@ -12,6 +12,7 @@ RM := rm -rf
 # INC_DIRS := . libft
 # SRC_DIRS := . 
 # BONUS_DIR := checker_bonus/_obj_bonus
+LIBFT_DIR := libft/_obj
 OBJ_DIR := _obj
 BONUS_DIR := bonus/_obj_bonus
 INC_DIRS := . libft
@@ -83,7 +84,9 @@ all: $(LIBFT) $(NAME)
 $(NAME): $(OBJ_DIR) $(COMMON_OBJS) $(LIBFT)
 	$(CC) $(CFLAGS) $(COMMON_OBJS) $(LDFLAGS) -o $(NAME)
 
-bonus: $(LIBFT) $(BONUS_DIR) $(BONUS_OBJS)
+bonus: $(LIBFT) $(BONUS_DIR) $(BONUS_OBJS) $(BONUS_NAME)
+
+$(BONUS_NAME): $(LIBFT) $(BONUS_DIR) $(BONUS_OBJS)
 	$(CC) $(CFLAGS) $(BONUS_OBJS) $(LDFLAGS) -o $(BONUS_NAME)
 
 $(OBJ_DIR)/%.o: %.c | $(OBJ_DIR)
@@ -99,10 +102,10 @@ $(BONUS_DIR):
 	mkdir -p $(BONUS_DIR)
 
 clean:
-	$(RM) $(OBJ_DIR) $(BONUS_DIR)
+	$(RM) $(OBJ_DIR) $(BONUS_DIR) $(LIBFT_DIR)
 
 fclean: clean
-	$(RM) $(NAME) $(BONUS_NAME)
+	$(RM) $(NAME) $(BONUS_NAME) $(LIBFT_DIR)
 	$(RM) libft/_obj libft/libft.a
 
 re: fclean all
@@ -121,7 +124,5 @@ help:
 	@echo "	make help					Display this help message"
 
 -include $(OBJS:%.o=%.d)
-# -include $(BONUS_OBJS:%.o=%.d)
-# -include $(GNL_OBJS:%.o=%.d)
 
 .PHONY: all bonus clean fclean re help

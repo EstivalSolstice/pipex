@@ -6,7 +6,7 @@
 /*   By: joltmann <joltmann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/01 16:08:30 by joltmann          #+#    #+#             */
-/*   Updated: 2024/12/01 16:08:36 by joltmann         ###   ########.fr       */
+/*   Updated: 2025/01/24 04:03:25 by joltmann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,13 @@ void	parent_here_doc(t_pipex_data *data, int pipe_fd[2])
 
 void	handle_here_doc_bonus(t_pipex_data *data, char *limiter)
 {
+	pid_t	pid;
 	int		here_doc_pipe[2];
 
 	if (pipe(here_doc_pipe) == -1)
 		error_exit_bonus("Pipe creation failed");
-	if (fork() == 0)
+	pid = fork();
+	if (pid == 0)
 		child_here_doc(here_doc_pipe, limiter);
 	else
 		parent_here_doc(data, here_doc_pipe);

@@ -6,7 +6,7 @@
 /*   By: joltmann <joltmann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 20:45:44 by joltmann          #+#    #+#             */
-/*   Updated: 2024/12/01 16:07:42 by joltmann         ###   ########.fr       */
+/*   Updated: 2025/01/25 22:02:58 by joltmann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	open_files_here_doc_bonus(t_pipex_data *data);
 void	open_files_bonus(t_pipex_data *data);
 void	handle_here_doc_bonus(t_pipex_data *data, char *limiter);
 void	read_here_doc_input_bonus(int write_fd, char *limiter);
-int		wait_for_children_bonus(pid_t *pids, int num_pids);
+int		wait_for_children_bonus(pid_t *pids, int num_pids, int status);
 void	infile_error_exit_bonus(const char *filename);
 void	update_parent_bonus(t_pipex_data *data, int *fd_in, int pipe_fd[2],
 			pid_t pid);

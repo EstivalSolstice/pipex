@@ -6,7 +6,7 @@
 /*   By: joltmann <joltmann@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 22:10:50 by joltmann          #+#    #+#             */
-/*   Updated: 2024/11/13 23:24:57 by joltmann         ###   ########.fr       */
+/*   Updated: 2025/01/25 22:19:40 by joltmann         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,12 @@ void	process_single_command(t_pipex_data *data, int *fd_in, int cmd_index)
 	int		pipe_fd[2];
 	pid_t	pid;
 
+	if (*fd_in == -1)
+	{
+		*fd_in = open("/dev/null", O_RDONLY);
+		if (*fd_in == -1)
+			error_exit("pipex: Failed to open /dev/null");
+	}
 	if (pipe(pipe_fd) == -1)
 		error_exit("Pipe creation failed");
 	pid = fork();
