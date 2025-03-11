@@ -1,5 +1,5 @@
 NAME := pipex
-BONUS_NAME := pipex_bonus
+BONUS_NAME := pipex
 .DEFAULT_GOAL := all
 CC := cc
 RM := rm -rf
