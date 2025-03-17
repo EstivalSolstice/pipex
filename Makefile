@@ -84,10 +84,15 @@ all: $(LIBFT) $(NAME)
 $(NAME): $(OBJ_DIR) $(COMMON_OBJS) $(LIBFT)
 	$(CC) $(CFLAGS) $(COMMON_OBJS) $(LDFLAGS) -o $(NAME)
 
-bonus: $(LIBFT) $(BONUS_DIR) $(BONUS_OBJS) $(BONUS_NAME)
+# bonus: $(LIBFT) $(BONUS_DIR) $(BONUS_OBJS) $(BONUS_NAME)
+bonus: .bonus
 
-$(BONUS_NAME): $(LIBFT) $(BONUS_DIR) $(BONUS_OBJS)
+.bonus: $(LIBFT) $(BONUS_DIR) $(BONUS_OBJS)
 	$(CC) $(CFLAGS) $(BONUS_OBJS) $(LDFLAGS) -o $(BONUS_NAME)
+	touch .bonus
+
+# $(BONUS_NAME): $(LIBFT) $(BONUS_DIR) $(BONUS_OBJS)
+# 	$(CC) $(CFLAGS) $(BONUS_OBJS) $(LDFLAGS) -o $(BONUS_NAME)
 
 $(OBJ_DIR)/%.o: %.c | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -102,7 +107,7 @@ $(BONUS_DIR):
 	mkdir -p $(BONUS_DIR)
 
 clean:
-	$(RM) $(OBJ_DIR) $(BONUS_DIR) $(LIBFT_DIR)
+	$(RM) $(OBJ_DIR) $(BONUS_DIR) $(LIBFT_DIR) .bonus
 
 fclean: clean
 	$(RM) $(NAME) $(BONUS_NAME) $(LIBFT_DIR)
